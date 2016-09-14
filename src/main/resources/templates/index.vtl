@@ -1,0 +1,28 @@
+<h1>CD Library</h1>
+#if($cds)
+  #foreach($cd in $cds)
+    <h3>$cd.getCDName()</h3>
+    <p>$cd.getBandName()</p>
+    <p>$cd.getYear()</p>
+  #end
+#else
+  <p>
+    No CD's in your library.
+  </p>
+#end
+
+<form action="/" method="post">
+  <div class="form-group">
+    <label for="cd-name">Enter a CD Name</label>
+    <input type="text" name="cd-name" id="cd-name" class="form-control">
+  </div>
+  <div class="form-group">
+    <label for="band-name">Enter the band name</label>
+    <input type="text" name="band-name" id="band-name" class="form-control">
+  </div>
+  <div class="form-group">
+    <label for="year">Enter the year</label>
+    <input type="text" name="year" id="year" class="form-control">
+  </div>
+  <button type="submit" class="btn btn-default">Add CD to library</button>
+</form>
