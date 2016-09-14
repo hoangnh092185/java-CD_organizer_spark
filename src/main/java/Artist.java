@@ -1,7 +1,7 @@
 import java.util.List;
 import java.util.ArrayList;
 
-public class Artist {
+public class Artist implements Comparable<Artist>{
   private String mArtist;
   private static List<Artist> instances = new ArrayList<Artist>();
   private int mId;
@@ -33,5 +33,9 @@ public class Artist {
   }
   public static Artist find(int id){
     return instances.get(id -1);
+  }
+
+  public int compareTo(Artist artist2){
+    return getArtist().compareTo(artist2.getArtist());
   }
 }

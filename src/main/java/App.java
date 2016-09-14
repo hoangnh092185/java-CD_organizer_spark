@@ -1,42 +1,53 @@
-// import java.util.Map;
-// import java.util.HashMap;
-// import java.util.ArrayList;
-// import spark.ModelAndView;
-// import spark.template.velocity.VelocityTemplateEngine;
-// import static spark.Spark.*;
-// import java.util.Collections;
-//
-// public class App {
-//   public static void main(String[] args) {
-//     staticFileLocation("/public");
-//     String layout = "templates/layout.vtl";
-//
-//     get("/", (request, response) -> {
-//       Map<String, Object> model = new HashMap<String, Object>();
-//       model.put("template", "templates/index.vtl");
-//       return new ModelAndView(model, layout);
-//     }, new VelocityTemplateEngine());
-//
-//     post("/", (request, response) -> {
-//       Map<String, Object> model = new HashMap<String, Object>();
-//
-//       ArrayList<CD> cdsArray = request.session().attribute("cds");
-//       if (cdsArray == null) {
-//         cdsArray = new ArrayList<CD>();
-//         request.session().attribute("cds", cdsArray);
-//       }
-//
-//       CD userCD = new CD(request.queryParams("cd-name"), request.queryParams("band-name"), request.queryParams("year"));
-//       cdsArray.add(userCD);
-//       if(cdsArray.size()>1){
-//         Collections.sort(cdsArray);
-//       }
-//       model.put("cds", request.session().attribute("cds"));
-//       model.put("template", "templates/index.vtl");
-//       return new ModelAndView(model, layout);
-//     }, new VelocityTemplateEngine());
-//
-//
-//
-//   }
-// }
+import java.util.Map;
+import java.util.HashMap;
+import java.util.ArrayList;
+import spark.ModelAndView;
+import spark.template.velocity.VelocityTemplateEngine;
+import static spark.Spark.*;
+import java.util.Collections;
+
+public class App {
+  public static void main(String[] args) {
+    staticFileLocation("/public");
+    String layout = "templates/layout.vtl";
+
+    //homepage
+    get("/", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      model.put("artists",Artist.all());
+      model.put("template", "templates/index.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    //artist page
+    get("/artist/:id", (request, response)->{
+      Map<String, Object> model = new HashMap<String, Object>();
+      Artist currentArtist = Artist.find(Integer.parseInt(request.params(":id")));
+      model.put("artist",currentArtist);
+      model.put("cds",currentArtist.getCDs());
+      model.put("template", "templates/artist.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    //Submits form on a new artist
+    post("/", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      Artist anArtist = new Artist(request.queryParams("artist"));
+      model.put("artists",Artist.all());
+      model.put("template", "templates/index.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    //Submits a new CD
+    post("/artist/:id" , (request,response)-> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      Artist currentArtist = Artist.find(Integer.parseInt(request.queryParams("categoryId")));
+      CD newCD = new CD(request.queryParams("cd"),request.queryParams("year"));
+      currentArtist.addCDs(newCD);
+      model.put("artist",currentArtist);
+      model.put("cds",currentArtist.getCDs());
+      model.put("template", "templates/artist.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+  }
+}

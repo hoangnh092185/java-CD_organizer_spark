@@ -58,11 +58,6 @@ public class ArtistTest {
       Artist.clear();
       Artist artistOne = new Artist("AC/DC");
       assertEquals(0,artistOne.getCDs().size());
-
-
   }
-
-
-
 
 }

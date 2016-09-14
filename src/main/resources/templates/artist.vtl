@@ -1,0 +1,23 @@
+<h1>Add a CD to $artist.getArtist()</h1>
+  #foreach($cd in $cds)
+    <h4>$cd.getCDName()</h4>
+    <li>$cd.getYear()</li>
+  #end
+
+
+
+<form action="/artist/$artist.getId()" method="post">
+  <input id="categoryId" name="categoryId" type="hidden" value="$artist.getId()">
+
+  <div class="form-group">
+    <label for="cd">CD</label>
+    <input id="cd" name="cd" type="text" class="form-control">
+  </div>
+  <div class="form-group">
+    <label for="year">Year</label>
+    <input id="year" name="year" type="number" class="form-control">
+  </div>
+  <button type="submit" class="btn btn-success">Add a new CD</button>
+</form>
+
+<a href="/">Go Back To All Artists</a>
